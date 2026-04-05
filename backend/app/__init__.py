@@ -1,0 +1,1 @@
+# SnapBuy backend application package.

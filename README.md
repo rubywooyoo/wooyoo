@@ -63,15 +63,43 @@ snapbuy-monorepo/
 
 ## 當前狀態
 
-目前專案內容以產品規劃與規格文件為主，尚未正式展開前後端實作。這個 repository 現階段的主要用途是：
+目前已建立 Product V1 的第一版可運行骨架：
 
-- 收斂產品方向
-- 對齊 V1 範圍
-- 固化技術與資料模型假設
-- 為後續實作拆解提供基礎文件
+- `backend/`：FastAPI + SQLAlchemy + 核心資料模型 + API 路由雛形
+- `frontend/`：Vite + React + Tailwind + shopper/admin 路由與頁面骨架
+- `docs/`：產品概述、MVP 規劃、系統規格書
+
+目前階段屬於 scaffold 實作，核心流程與 UI 結構已落地，但商業邏輯（完整庫存交易、支付 webhooks、LINE 推播任務、權限驗證）仍在後續迭代中。
+
+## 本機啟動
+
+### Backend
+
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+uvicorn app.main:app --reload
+```
+
+- API 文件：`http://127.0.0.1:8000/docs`
+- 健康檢查：`http://127.0.0.1:8000/health`
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+- 開發站點：`http://127.0.0.1:5173`
 
 ## 下一步建議
 
-- 補一份 `docs/product_v1/prd.md`，把需求拆成 user stories 與 acceptance criteria。
-- 補一份 `docs/product_v1/erd.md` 或 `docs/product_v1/data_model.md`，把資料表與欄位定義再進一步具體化。
-- 開始建立 `frontend/` 與 `backend/` 初始骨架。
+- 串接前端頁面到後端 API（先打通 `/api/v1/buyer/home` 與 `/api/v1/admin/products`）。
+- 補上資料庫 migration（Alembic）與 seed data。
+- 導入 JWT 真正簽發與權限驗證 middleware。
+- 實作支付 webhook、訂單狀態流轉與 LINE 推播任務。
